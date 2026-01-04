@@ -1,0 +1,84 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static admin_modify %}
+
+{% block title %}Import Excel File | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+&rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+&rsaquo; <a href="{% url 'admin:dashboards_pandharraste_changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+&rsaquo; {% trans 'Import from Excel' %}
+</div>
+{% endblock %}
+
+{% block content %}
+<h1>Import पांढर रस्ते Data from Excel</h1>
+
+<div style="max-width: 800px; margin: 20px 0;">
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+        <h3 style="margin-top: 0;">Expected Excel Format:</h3>
+        <p>The Excel file should have the following columns (in order):</p>
+        <ul>
+            <li><strong>Column A:</strong> अ.क्र. (Serial Number) - <em>Will be skipped</em></li>
+            <li><strong>Column B:</strong> Taluka name (तालुका)</li>
+            <li><strong>Column C:</strong> अतिक्रमित व Geo-tag केलेले रस्ते (Geo-tag Roads count)</li>
+            <li><strong>Column D:</strong> अतिक्रमित व Geo-tag रस्त्यांची लांबी (कि.मी.) (Geo-tag Length in km)</li>
+            <li><strong>Column E:</strong> अतिक्रमण काढलेले रस्ते (Cleared Roads count)</li>
+            <li><strong>Column F:</strong> अतिक्रमण काढलेल्या रस्त्यांची लांबी (कि.मी.) (Cleared Length in km)</li>
+            <li><strong>Column G:</strong> लाभ झालेल्या शेतकऱ्यांची संख्या (Farmers Benefited count)</li>
+            <li><strong>Column H:</strong> शेरा (Remarks) - <em>Will be skipped</em></li>
+        </ul>
+        <p><strong>Note:</strong> First row should contain headers (will be skipped automatically). Serial number and remarks columns are ignored.</p>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        {% csrf_token %}
+        
+        <div style="margin-bottom: 20px;">
+            <label for="excel_file" style="display: block; margin-bottom: 8px; font-weight: bold;">
+                Select Excel File (.xlsx):
+            </label>
+            <input type="file" name="excel_file" id="excel_file" accept=".xlsx,.xlsm" required 
+                   style="padding: 8px; border: 1px solid #ddd; border-radius: 4px; width: 100%;">
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <label for="sheet_name" style="display: block; margin-bottom: 8px; font-weight: bold;">
+                Sheet Name (optional):
+            </label>
+            <input type="text" name="sheet_name" id="sheet_name" 
+                   placeholder="Leave empty to use first sheet"
+                   style="padding: 8px; border: 1px solid #ddd; border-radius: 4px; width: 100%;">
+            <small style="color: #666;">If not specified, the first sheet will be used.</small>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <label for="header_row" style="display: block; margin-bottom: 8px; font-weight: bold;">
+                Header Row Number:
+            </label>
+            <input type="number" name="header_row" id="header_row" value="1" min="1" 
+                   style="padding: 8px; border: 1px solid #ddd; border-radius: 4px; width: 100px;">
+            <small style="color: #666; margin-left: 10px;">Row number containing headers (1 = first row)</small>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <label style="display: flex; align-items: center; cursor: pointer;">
+                <input type="checkbox" name="update_existing" checked style="margin-right: 8px;">
+                <span>Update existing records (if unchecked, duplicates will be skipped)</span>
+            </label>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <button type="submit" style="background: #417690; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold;">
+                Import Data
+            </button>
+            <a href="{% url 'admin:dashboards_pandharraste_changelist' %}" 
+               style="margin-left: 10px; padding: 10px 20px; background: #ba2121; color: white; text-decoration: none; border-radius: 4px; display: inline-block;">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+

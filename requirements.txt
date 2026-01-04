@@ -1,0 +1,15 @@
+# Django Framework
+Django>=5.2.9
+
+# Database
+# PostgreSQL support
+psycopg2-binary>=2.9.0
+
+# Excel file handling
+openpyxl>=3.1.0
+pandas>=2.0.0
+
+# Utilities
+python-dateutil>=2.8.0
+python-decouple>=3.8
+

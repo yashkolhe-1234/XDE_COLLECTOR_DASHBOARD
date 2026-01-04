@@ -1,0 +1,347 @@
+{% extends "dashboards/base.html" %}
+
+{% block content %}
+
+<!-- PAGE TITLE -->
+<h2 style="margin-bottom: 20px;">ॲग्रीस्टॅक – प्रगती डॅशबोर्ड</h2>
+
+<!-- KPI CARDS -->
+<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px;">
+
+    <div class="kpi-card">
+        <h4>एकूण गावे</h4>
+        <p class="kpi-value">{{ kpis.total_villages|default:"0" }}</p>
+    </div>
+
+    <div class="kpi-card">
+        <h4>एकूण शेतकरी</h4>
+        <p class="kpi-value">{{ kpis.total_farmers|default:"0" }}</p>
+    </div>
+
+    <div class="kpi-card">
+        <h4>फार्मर आयडी तयार केलेले</h4>
+        <p class="kpi-value">{{ kpis.farmers_with_id_created|default:"0" }}</p>
+    </div>
+
+    <div class="kpi-card">
+        <h4>शिल्लक शेतकरी</h4>
+        <p class="kpi-value">{{ kpis.farmers_pending_id|default:"0" }}</p>
+    </div>
+
+</div>
+
+<!-- CHARTS SECTION -->
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 30px;">
+
+    <!-- Chart 1: Stacked Bar Chart - Taluka-wise Farmer ID Status -->
+    <div class="chart-box" style="grid-column: 1 / -1;">
+        <h4>Taluka-निहाय फार्मर आयडी स्थिती (Stacked)</h4>
+        <canvas id="chart-farmer-id-status"></canvas>
+    </div>
+
+    <!-- Chart 2: Donut Chart - Overall AgriStack Completion -->
+    <div class="chart-box">
+        <h4>ॲग्रीस्टॅक पूर्णता - एकत्रित आढावा</h4>
+        <canvas id="chart-completion-overview"></canvas>
+    </div>
+
+    <!-- Chart 3: Bubble Chart - Coverage Efficiency Analysis -->
+    <div class="chart-box">
+        <h4>कव्हरेज कार्यक्षमता विश्लेषण</h4>
+        <canvas id="chart-efficiency-analysis"></canvas>
+    </div>
+
+</div>
+
+<!-- DATA TABLE -->
+<h3 style="margin-bottom: 10px;">तालुकानिहाय तपशील</h3>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>तालुका</th>
+            <th>एकूण गावे</th>
+            <th>एकूण शेतकरी</th>
+            <th>फार्मर आयडी तयार केलेले</th>
+            <th>शिल्लक शेतकरी</th>
+            <th>पूर्णता %</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if table_data %}
+            {% for row in table_data %}
+            <tr>
+                <td>{{ row.taluka }}</td>
+                <td>{{ row.total_villages }}</td>
+                <td>{{ row.total_farmers }}</td>
+                <td>{{ row.farmers_with_id_created }}</td>
+                <td>{{ row.farmers_pending_id }}</td>
+                <td>{{ row.completion_percentage|floatformat:1 }}%</td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="6" style="text-align:center;">डेटा नंतर जोडला जाईल</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<script>
+    // Chart data from Django (already JSON-encoded)
+    // These variables will be populated by the backend
+    const chartData = {
+        labels: {{ chart_data.labels|safe }},
+        farmersWithId: {{ chart_data.farmers_with_id|safe }},
+        farmersPending: {{ chart_data.farmers_pending|safe }},
+        totalFarmers: {{ chart_data.total_farmers|safe }},
+        totalVillages: {{ chart_data.total_villages|safe }},
+        completionPercentages: {{ chart_data.completion_percentages|safe }},
+        overallCreated: {{ chart_data.overall_created|safe }},
+        overallPending: {{ chart_data.overall_pending|safe }}
+    };
+
+    // Chart 1: Stacked Bar Chart - Taluka-wise Farmer ID Status
+    new Chart(document.getElementById('chart-farmer-id-status'), {
+        type: 'bar',
+        data: {
+            labels: chartData.labels,
+            datasets: [
+                {
+                    label: 'फार्मर आयडी तयार केलेले शेतकरी',
+                    data: chartData.farmersWithId,
+                    backgroundColor: 'rgba(34, 197, 94, 0.8)',
+                    borderColor: 'rgba(34, 197, 94, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'शिल्लक शेतकरी',
+                    data: chartData.farmersPending,
+                    backgroundColor: 'rgba(251, 146, 60, 0.8)',
+                    borderColor: 'rgba(251, 146, 60, 1)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 15,
+                        font: {
+                            size: 12
+                        }
+                    }
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                        footer: function(tooltipItems) {
+                            let total = 0;
+                            tooltipItems.forEach(function(tooltipItem) {
+                                total += tooltipItem.parsed.y;
+                            });
+                            return 'एकूण शेतकरी: ' + total;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    stacked: true,
+                    ticks: {
+                        maxRotation: 45,
+                        minRotation: 45
+                    }
+                },
+                y: {
+                    stacked: true,
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    },
+                    title: {
+                        display: true,
+                        text: 'शेतकऱ्यांची संख्या'
+                    }
+                }
+            }
+        }
+    });
+
+    // Chart 2: Donut Chart - Overall AgriStack Completion
+    new Chart(document.getElementById('chart-completion-overview'), {
+        type: 'doughnut',
+        data: {
+            labels: ['फार्मर आयडी तयार केलेले', 'शिल्लक शेतकरी'],
+            datasets: [{
+                data: [
+                    chartData.overallCreated,
+                    chartData.overallPending
+                ],
+                backgroundColor: [
+                    'rgba(34, 197, 94, 0.8)',
+                    'rgba(251, 146, 60, 0.8)'
+                ],
+                borderColor: '#ffffff',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'right',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 12,
+                        font: {
+                            size: 11
+                        },
+                        boxWidth: 12,
+                        generateLabels: function(chart) {
+                            const data = chart.data;
+                            if (data.labels.length && data.datasets.length) {
+                                const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                return data.labels.map((label, i) => {
+                                    const value = data.datasets[0].data[i];
+                                    const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                                    return {
+                                        text: label + ': ' + value.toLocaleString() + ' (' + percentage + '%)',
+                                        fillStyle: data.datasets[0].backgroundColor[i],
+                                        hidden: false,
+                                        index: i
+                                    };
+                                });
+                            }
+                            return [];
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.parsed || 0;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                            return label + ': ' + value.toLocaleString() + ' (' + percentage + '%)';
+                        }
+                    }
+                }
+            },
+            cutout: '60%'
+        },
+        plugins: [{
+            id: 'centerText',
+            beforeDraw: function(chart) {
+                const ctx = chart.ctx;
+                const centerX = chart.chartArea.left + (chart.chartArea.right - chart.chartArea.left) / 2;
+                const centerY = chart.chartArea.top + (chart.chartArea.bottom - chart.chartArea.top) / 2;
+                
+                const total = chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                const created = chart.data.datasets[0].data[0];
+                const percentage = total > 0 ? ((created / total) * 100).toFixed(1) : 0;
+                
+                ctx.save();
+                ctx.font = 'bold 16px Arial';
+                ctx.fillStyle = '#111827';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('ॲग्रीस्टॅक', centerX, centerY - 15);
+                
+                ctx.font = 'bold 20px Arial';
+                ctx.fillText(percentage + '%', centerX, centerY + 5);
+                
+                ctx.font = '12px Arial';
+                ctx.fillStyle = '#6b7280';
+                ctx.fillText('पूर्णता', centerX, centerY + 25);
+                ctx.restore();
+            }
+        }]
+    });
+
+    // Chart 3: Bubble Chart - Coverage Efficiency Analysis
+    // Prepare bubble chart data: X = total farmers, Y = completion %, size = villages
+    const bubbleData = chartData.labels.map((label, index) => ({
+        x: chartData.totalFarmers[index],
+        y: chartData.completionPercentages[index],
+        r: Math.max(5, Math.min(30, chartData.totalVillages[index] / 10)), // Scale village count to bubble size
+        label: label
+    }));
+
+    new Chart(document.getElementById('chart-efficiency-analysis'), {
+        type: 'bubble',
+        data: {
+            datasets: [{
+                label: 'तालुका',
+                data: bubbleData,
+                backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                borderColor: 'rgba(59, 130, 246, 1)',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        title: function(context) {
+                            return context[0].raw.label || 'तालुका';
+                        },
+                        label: function(context) {
+                            const data = context.raw;
+                            return [
+                                'एकूण शेतकरी: ' + data.x.toLocaleString(),
+                                'पूर्णता: ' + data.y.toFixed(1) + '%',
+                                'एकूण गावे: ' + Math.round(data.r * 10).toLocaleString()
+                            ];
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'एकूण शेतकरी (तालुका आकार)'
+                    },
+                    ticks: {
+                        precision: 0
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    title: {
+                        display: true,
+                        text: 'पूर्णता टक्केवारी (%)'
+                    },
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}

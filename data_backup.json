@@ -1,0 +1,1080 @@
+[
+{
+  "model": "admin.logentry",
+  "pk": 1,
+  "fields": {
+    "action_time": "2026-01-03T10:28:45.144Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "1",
+    "object_repr": "αñ╡αñ┐αñ╖αñ» αñòαÑìαñ░. 4 αñàαñ╣αñ╡αñ╛αñ▓αñ╛αñÜαñ╛ αñ«αñ╣αñ┐αñ¿αñ╛: αñ«αñ╛αñ╣αÑç 15 αñ£αÑüαñ▓αÑê 2025 αñàαñûαÑçαñ░",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 2,
+  "fields": {
+    "action_time": "2026-01-03T10:28:45.144Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "2",
+    "object_repr": "αñà.αñòαÑìαñ░.",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 3,
+  "fields": {
+    "action_time": "2026-01-03T10:28:45.144Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "11",
+    "object_repr": "9",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 4,
+  "fields": {
+    "action_time": "2026-01-03T10:28:45.144Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "10",
+    "object_repr": "8",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 5,
+  "fields": {
+    "action_time": "2026-01-03T10:28:45.144Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "9",
+    "object_repr": "7",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 6,
+  "fields": {
+    "action_time": "2026-01-03T10:28:45.144Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "8",
+    "object_repr": "6",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 7,
+  "fields": {
+    "action_time": "2026-01-03T10:28:45.144Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "7",
+    "object_repr": "5",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 8,
+  "fields": {
+    "action_time": "2026-01-03T10:28:45.144Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "6",
+    "object_repr": "4",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 9,
+  "fields": {
+    "action_time": "2026-01-03T10:28:45.144Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "5",
+    "object_repr": "3",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 10,
+  "fields": {
+    "action_time": "2026-01-03T10:28:45.144Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "4",
+    "object_repr": "2",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 11,
+  "fields": {
+    "action_time": "2026-01-03T10:28:45.144Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "18",
+    "object_repr": "16",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 12,
+  "fields": {
+    "action_time": "2026-01-03T10:28:45.144Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "17",
+    "object_repr": "15",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 13,
+  "fields": {
+    "action_time": "2026-01-03T10:28:45.144Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "16",
+    "object_repr": "14",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 14,
+  "fields": {
+    "action_time": "2026-01-03T10:28:45.144Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "15",
+    "object_repr": "13",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 15,
+  "fields": {
+    "action_time": "2026-01-03T10:28:45.144Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "14",
+    "object_repr": "12",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 16,
+  "fields": {
+    "action_time": "2026-01-03T10:28:45.144Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "13",
+    "object_repr": "11",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 17,
+  "fields": {
+    "action_time": "2026-01-03T10:28:45.144Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "12",
+    "object_repr": "10",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 18,
+  "fields": {
+    "action_time": "2026-01-03T10:28:45.144Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "3",
+    "object_repr": "1",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 19,
+  "fields": {
+    "action_time": "2026-01-03T10:38:08.100Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "30",
+    "object_repr": "Ambegaon",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 20,
+  "fields": {
+    "action_time": "2026-01-03T10:38:08.108Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "35",
+    "object_repr": "Baramati",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 21,
+  "fields": {
+    "action_time": "2026-01-03T10:38:08.108Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "28",
+    "object_repr": "Bhor",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 22,
+  "fields": {
+    "action_time": "2026-01-03T10:38:08.108Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "27",
+    "object_repr": "Daund",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 23,
+  "fields": {
+    "action_time": "2026-01-03T10:38:08.108Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "26",
+    "object_repr": "Haveli",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 24,
+  "fields": {
+    "action_time": "2026-01-03T10:38:08.108Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "29",
+    "object_repr": "Indapur",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 25,
+  "fields": {
+    "action_time": "2026-01-03T10:38:08.108Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "31",
+    "object_repr": "Junnar",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 26,
+  "fields": {
+    "action_time": "2026-01-03T10:38:08.108Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "36",
+    "object_repr": "Khed",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 27,
+  "fields": {
+    "action_time": "2026-01-03T10:38:08.108Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "23",
+    "object_repr": "Loni Kalbhor",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 28,
+  "fields": {
+    "action_time": "2026-01-03T10:38:08.108Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "33",
+    "object_repr": "Maval",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 29,
+  "fields": {
+    "action_time": "2026-01-03T10:38:08.108Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "24",
+    "object_repr": "Mulshi",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 30,
+  "fields": {
+    "action_time": "2026-01-03T10:38:08.108Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "22",
+    "object_repr": "Pimpri-Chinchwad",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 31,
+  "fields": {
+    "action_time": "2026-01-03T10:38:08.108Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "21",
+    "object_repr": "Pune City",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 32,
+  "fields": {
+    "action_time": "2026-01-03T10:38:08.108Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "32",
+    "object_repr": "Purandar",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 33,
+  "fields": {
+    "action_time": "2026-01-03T10:38:08.108Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "25",
+    "object_repr": "Shirur",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 34,
+  "fields": {
+    "action_time": "2026-01-03T10:38:08.108Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "20",
+    "object_repr": "Taluka",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 35,
+  "fields": {
+    "action_time": "2026-01-03T10:38:08.108Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "34",
+    "object_repr": "Velhe",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 36,
+  "fields": {
+    "action_time": "2026-01-03T10:38:08.108Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "19",
+    "object_repr": "αñÅαñòαÑéαñú",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 37,
+  "fields": {
+    "action_time": "2026-01-03T11:13:30.857Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "37",
+    "object_repr": "αñÅαñòαÑéαñú",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 38,
+  "fields": {
+    "action_time": "2026-01-04T07:30:26.259Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "38",
+    "object_repr": "Taluka",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$k9cz208InKIygzNROzvKsa$1oIPnhlY86b/woOclBUGjq0wH2MNUaarEHpbq4csvwo=",
+    "last_login": "2026-01-03T07:08:32.218Z",
+    "is_superuser": true,
+    "username": "yash",
+    "first_name": "",
+    "last_name": "",
+    "email": "yash.kolhe@xdestudios.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-01-03T07:05:49.584Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "3wy3byz5s8jwuci9vbz7mnjm2wwt80jr",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2pCBKVBcuvcMZBhAqoYmpV0Z765NutDtf-_9lwi0rTVsPS9hSuIslDj9bpH4kdsO0p3abZY8t3WZotwVedAur3PKz8vh_h1U6vVbuzJAVCYDRcio2JNFsMZrh6bYNFBRo85Y2CvLnApr0IQeirEOaQTx_gDZ8TeR:1vbvkW:yby3rRfBBu2qRAiTFZ9-xQimu83rMe9R8MxmBKKy9OA",
+    "expire_date": "2026-01-17T07:08:32.221Z"
+  }
+},
+{
+  "model": "dashboards.pandharraste",
+  "pk": 39,
+  "fields": {
+    "taluka": "Pune City",
+    "geo_tag_roads": 0,
+    "geo_tag_length_km": 0.0,
+    "cleared_roads": 0,
+    "cleared_length_km": 0.0,
+    "farmers_benefited": 0
+  }
+},
+{
+  "model": "dashboards.pandharraste",
+  "pk": 40,
+  "fields": {
+    "taluka": "Pimpri-Chinchwad",
+    "geo_tag_roads": 0,
+    "geo_tag_length_km": 0.0,
+    "cleared_roads": 0,
+    "cleared_length_km": 0.0,
+    "farmers_benefited": 0
+  }
+},
+{
+  "model": "dashboards.pandharraste",
+  "pk": 41,
+  "fields": {
+    "taluka": "Loni Kalbhor",
+    "geo_tag_roads": 0,
+    "geo_tag_length_km": 0.0,
+    "cleared_roads": 8,
+    "cleared_length_km": 19.0,
+    "farmers_benefited": 1400
+  }
+},
+{
+  "model": "dashboards.pandharraste",
+  "pk": 42,
+  "fields": {
+    "taluka": "Mulshi",
+    "geo_tag_roads": 57,
+    "geo_tag_length_km": 11.0,
+    "cleared_roads": 46,
+    "cleared_length_km": 73.0,
+    "farmers_benefited": 1348
+  }
+},
+{
+  "model": "dashboards.pandharraste",
+  "pk": 43,
+  "fields": {
+    "taluka": "Shirur",
+    "geo_tag_roads": 118,
+    "geo_tag_length_km": 83.0,
+    "cleared_roads": 27,
+    "cleared_length_km": 39.0,
+    "farmers_benefited": 3287
+  }
+},
+{
+  "model": "dashboards.pandharraste",
+  "pk": 44,
+  "fields": {
+    "taluka": "Haveli",
+    "geo_tag_roads": 54,
+    "geo_tag_length_km": 57.0,
+    "cleared_roads": 24,
+    "cleared_length_km": 28.0,
+    "farmers_benefited": 3470
+  }
+},
+{
+  "model": "dashboards.pandharraste",
+  "pk": 45,
+  "fields": {
+    "taluka": "Daund",
+    "geo_tag_roads": 73,
+    "geo_tag_length_km": 108.0,
+    "cleared_roads": 52,
+    "cleared_length_km": 69.0,
+    "farmers_benefited": 2769
+  }
+},
+{
+  "model": "dashboards.pandharraste",
+  "pk": 46,
+  "fields": {
+    "taluka": "Bhor",
+    "geo_tag_roads": 127,
+    "geo_tag_length_km": 140.0,
+    "cleared_roads": 94,
+    "cleared_length_km": 107.0,
+    "farmers_benefited": 1570
+  }
+},
+{
+  "model": "dashboards.pandharraste",
+  "pk": 47,
+  "fields": {
+    "taluka": "Indapur",
+    "geo_tag_roads": 72,
+    "geo_tag_length_km": 123.0,
+    "cleared_roads": 61,
+    "cleared_length_km": 118.0,
+    "farmers_benefited": 1170
+  }
+},
+{
+  "model": "dashboards.pandharraste",
+  "pk": 48,
+  "fields": {
+    "taluka": "Ambegaon",
+    "geo_tag_roads": 75,
+    "geo_tag_length_km": 135.0,
+    "cleared_roads": 70,
+    "cleared_length_km": 129.0,
+    "farmers_benefited": 2135
+  }
+},
+{
+  "model": "dashboards.pandharraste",
+  "pk": 49,
+  "fields": {
+    "taluka": "Junnar",
+    "geo_tag_roads": 65,
+    "geo_tag_length_km": 70.0,
+    "cleared_roads": 75,
+    "cleared_length_km": 75.0,
+    "farmers_benefited": 2958
+  }
+},
+{
+  "model": "dashboards.pandharraste",
+  "pk": 50,
+  "fields": {
+    "taluka": "Purandar",
+    "geo_tag_roads": 93,
+    "geo_tag_length_km": 58.0,
+    "cleared_roads": 68,
+    "cleared_length_km": 61.0,
+    "farmers_benefited": 1680
+  }
+},
+{
+  "model": "dashboards.pandharraste",
+  "pk": 51,
+  "fields": {
+    "taluka": "Maval",
+    "geo_tag_roads": 107,
+    "geo_tag_length_km": 190.0,
+    "cleared_roads": 57,
+    "cleared_length_km": 46.0,
+    "farmers_benefited": 1870
+  }
+},
+{
+  "model": "dashboards.pandharraste",
+  "pk": 52,
+  "fields": {
+    "taluka": "Velhe",
+    "geo_tag_roads": 27,
+    "geo_tag_length_km": 32.0,
+    "cleared_roads": 24,
+    "cleared_length_km": 29.0,
+    "farmers_benefited": 1440
+  }
+},
+{
+  "model": "dashboards.pandharraste",
+  "pk": 53,
+  "fields": {
+    "taluka": "Baramati",
+    "geo_tag_roads": 227,
+    "geo_tag_length_km": 352.0,
+    "cleared_roads": 51,
+    "cleared_length_km": 45.0,
+    "farmers_benefited": 857
+  }
+},
+{
+  "model": "dashboards.pandharraste",
+  "pk": 54,
+  "fields": {
+    "taluka": "Khed",
+    "geo_tag_roads": 81,
+    "geo_tag_length_km": 81.0,
+    "cleared_roads": 70,
+    "cleared_length_km": 73.0,
+    "farmers_benefited": 4002
+  }
+},
+{
+  "model": "dashboards.ehaqq",
+  "pk": 1,
+  "fields": {
+    "taluka": "αñûαÑçαñí",
+    "total_applications": 25518,
+    "approved_applications": 21443,
+    "rejected_applications": 3878,
+    "pending_applications": 197,
+    "approved_percentage": 84.09,
+    "rejected_percentage": 15.2,
+    "pending_percentage": 0.77,
+    "period_work_count": 80
+  }
+},
+{
+  "model": "dashboards.ehaqq",
+  "pk": 2,
+  "fields": {
+    "taluka": "αñªαÑîαñéαñí",
+    "total_applications": 22113,
+    "approved_applications": 19333,
+    "rejected_applications": 2581,
+    "pending_applications": 199,
+    "approved_percentage": 87.43,
+    "rejected_percentage": 11.67,
+    "pending_percentage": 0.9,
+    "period_work_count": 156
+  }
+},
+{
+  "model": "dashboards.ehaqq",
+  "pk": 3,
+  "fields": {
+    "taluka": "αñ£αÑüαñ¿αÑìαñ¿αñ░",
+    "total_applications": 18451,
+    "approved_applications": 15549,
+    "rejected_applications": 2582,
+    "pending_applications": 320,
+    "approved_percentage": 84.27,
+    "rejected_percentage": 13.99,
+    "pending_percentage": 1.73,
+    "period_work_count": 136
+  }
+},
+{
+  "model": "dashboards.ehaqq",
+  "pk": 4,
+  "fields": {
+    "taluka": "αñ╢αñ┐αñ░αÑéαñ░",
+    "total_applications": 17659,
+    "approved_applications": 13958,
+    "rejected_applications": 3622,
+    "pending_applications": 79,
+    "approved_percentage": 79.04,
+    "rejected_percentage": 20.51,
+    "pending_percentage": 0.45,
+    "period_work_count": 88
+  }
+},
+{
+  "model": "dashboards.ehaqq",
+  "pk": 5,
+  "fields": {
+    "taluka": "αñ╣αñ╡αÑçαñ▓αÑÇ",
+    "total_applications": 17247,
+    "approved_applications": 12792,
+    "rejected_applications": 4099,
+    "pending_applications": 356,
+    "approved_percentage": 74.17,
+    "rejected_percentage": 23.77,
+    "pending_percentage": 2.6,
+    "period_work_count": 126
+  }
+},
+{
+  "model": "dashboards.ehaqq",
+  "pk": 6,
+  "fields": {
+    "taluka": "αñ¬αÑüαñ░αñéαñªαñ░",
+    "total_applications": 14327,
+    "approved_applications": 11089,
+    "rejected_applications": 3085,
+    "pending_applications": 153,
+    "approved_percentage": 77.4,
+    "rejected_percentage": 21.53,
+    "pending_percentage": 1.07,
+    "period_work_count": 116
+  }
+},
+{
+  "model": "dashboards.ehaqq",
+  "pk": 7,
+  "fields": {
+    "taluka": "αñ¼αñ╛αñ░αñ╛αñ«αññαÑÇ",
+    "total_applications": 15799,
+    "approved_applications": 12858,
+    "rejected_applications": 2829,
+    "pending_applications": 112,
+    "approved_percentage": 81.38,
+    "rejected_percentage": 17.91,
+    "pending_percentage": 0.71,
+    "period_work_count": 129
+  }
+},
+{
+  "model": "dashboards.ehaqq",
+  "pk": 8,
+  "fields": {
+    "taluka": "αñêαñéαñªαñ╛αñ¬αÑüαñ░",
+    "total_applications": 12225,
+    "approved_applications": 10690,
+    "rejected_applications": 1440,
+    "pending_applications": 95,
+    "approved_percentage": 87.44,
+    "rejected_percentage": 11.78,
+    "pending_percentage": 0.78,
+    "period_work_count": 164
+  }
+},
+{
+  "model": "dashboards.ehaqq",
+  "pk": 9,
+  "fields": {
+    "taluka": "αñåαñéαñ¼αÑçαñùαñ╛αñ╡",
+    "total_applications": 10872,
+    "approved_applications": 8499,
+    "rejected_applications": 2224,
+    "pending_applications": 149,
+    "approved_percentage": 78.17,
+    "rejected_percentage": 20.46,
+    "pending_percentage": 1.37,
+    "period_work_count": 63
+  }
+},
+{
+  "model": "dashboards.ehaqq",
+  "pk": 10,
+  "fields": {
+    "taluka": "αñ¡αÑïαñ░",
+    "total_applications": 8798,
+    "approved_applications": 7137,
+    "rejected_applications": 1554,
+    "pending_applications": 160,
+    "approved_percentage": 81.12,
+    "rejected_percentage": 17.66,
+    "pending_percentage": 1.22,
+    "period_work_count": 36
+  }
+},
+{
+  "model": "dashboards.ehaqq",
+  "pk": 11,
+  "fields": {
+    "taluka": "αñ«αñ╛αñ╡αñ│",
+    "total_applications": 6043,
+    "approved_applications": 4950,
+    "rejected_applications": 993,
+    "pending_applications": 100,
+    "approved_percentage": 81.91,
+    "rejected_percentage": 16.43,
+    "pending_percentage": 1.65,
+    "period_work_count": 42
+  }
+},
+{
+  "model": "dashboards.ehaqq",
+  "pk": 12,
+  "fields": {
+    "taluka": "αñ«αÑüαñ│αñ╢αÑÇ",
+    "total_applications": 5865,
+    "approved_applications": 4403,
+    "rejected_applications": 1368,
+    "pending_applications": 94,
+    "approved_percentage": 75.07,
+    "rejected_percentage": 23.32,
+    "pending_percentage": 1.6,
+    "period_work_count": 42
+  }
+},
+{
+  "model": "dashboards.ehaqq",
+  "pk": 13,
+  "fields": {
+    "taluka": "αñ╡αÑçαñ▓αÑìαñ╣αñ╛",
+    "total_applications": 2912,
+    "approved_applications": 2299,
+    "rejected_applications": 556,
+    "pending_applications": 57,
+    "approved_percentage": 78.95,
+    "rejected_percentage": 19.09,
+    "pending_percentage": 1.96,
+    "period_work_count": 28
+  }
+},
+{
+  "model": "dashboards.ehaqq",
+  "pk": 14,
+  "fields": {
+    "taluka": "αñ¬αÑüαñúαÑç αñ╢αñ╣αñ░",
+    "total_applications": 79,
+    "approved_applications": 41,
+    "rejected_applications": 34,
+    "pending_applications": 4,
+    "approved_percentage": 91.9,
+    "rejected_percentage": 43.06,
+    "pending_percentage": 5.06,
+    "period_work_count": 1
+  }
+},
+{
+  "model": "dashboards.agristack",
+  "pk": 1,
+  "fields": {
+    "taluka": "αñ£αÑüαñ¿αÑìαñ¿αñ░",
+    "total_villages": 185,
+    "total_farmers": 87826,
+    "farmers_with_id_created": 79338,
+    "farmers_pending_id": -7556,
+    "completion_percentage": 91.0
+  }
+},
+{
+  "model": "dashboards.agristack",
+  "pk": 2,
+  "fields": {
+    "taluka": "αñåαñéαñ¼αÑçαñùαñ╛αñ╡",
+    "total_villages": 142,
+    "total_farmers": 67351,
+    "farmers_with_id_created": 50512,
+    "farmers_pending_id": 8441,
+    "completion_percentage": 75.0
+  }
+},
+{
+  "model": "dashboards.agristack",
+  "pk": 3,
+  "fields": {
+    "taluka": "αñªαÑîαñéαñí",
+    "total_villages": 98,
+    "total_farmers": 102842,
+    "farmers_with_id_created": 68424,
+    "farmers_pending_id": 4468,
+    "completion_percentage": 67.0
+  }
+},
+{
+  "model": "dashboards.agristack",
+  "pk": 4,
+  "fields": {
+    "taluka": "αñ╢αñ┐αñ░αÑüαñ░",
+    "total_villages": 105,
+    "total_farmers": 114359,
+    "farmers_with_id_created": 72714,
+    "farmers_pending_id": 2011,
+    "completion_percentage": 64.0
+  }
+},
+{
+  "model": "dashboards.agristack",
+  "pk": 5,
+  "fields": {
+    "taluka": "αñ¬αÑüαñ░αñéαñªαñ░",
+    "total_villages": 103,
+    "total_farmers": 86511,
+    "farmers_with_id_created": 52013,
+    "farmers_pending_id": -3856,
+    "completion_percentage": 60.0
+  }
+},
+{
+  "model": "dashboards.agristack",
+  "pk": 6,
+  "fields": {
+    "taluka": "αñûαÑçαñí",
+    "total_villages": 192,
+    "total_farmers": 99255,
+    "farmers_with_id_created": 59174,
+    "farmers_pending_id": -4509,
+    "completion_percentage": 60.0
+  }
+},
+{
+  "model": "dashboards.agristack",
+  "pk": 7,
+  "fields": {
+    "taluka": "αñ¡αÑïαñ░",
+    "total_villages": 200,
+    "total_farmers": 54814,
+    "farmers_with_id_created": 33370,
+    "farmers_pending_id": -755,
+    "completion_percentage": 61.0
+  }
+},
+{
+  "model": "dashboards.agristack",
+  "pk": 8,
+  "fields": {
+    "taluka": "αñêαñéαñªαñ╛αñ¬αÑüαñ░",
+    "total_villages": 141,
+    "total_farmers": 109066,
+    "farmers_with_id_created": 70864,
+    "farmers_pending_id": -13463,
+    "completion_percentage": 65.0
+  }
+},
+{
+  "model": "dashboards.agristack",
+  "pk": 9,
+  "fields": {
+    "taluka": "αñ╡αÑçαñ▓αÑìαñ╣αñ╛",
+    "total_villages": 130,
+    "total_farmers": 20677,
+    "farmers_with_id_created": 11325,
+    "farmers_pending_id": 754,
+    "completion_percentage": 55.0
+  }
+},
+{
+  "model": "dashboards.agristack",
+  "pk": 10,
+  "fields": {
+    "taluka": "αñ«αñ╛αñ╡αñ│",
+    "total_villages": 191,
+    "total_farmers": 51201,
+    "farmers_with_id_created": 26027,
+    "farmers_pending_id": -1683,
+    "completion_percentage": 51.0
+  }
+},
+{
+  "model": "dashboards.agristack",
+  "pk": 11,
+  "fields": {
+    "taluka": "αñ¼αñ╛αñ░αñ╛αñ«αññαÑÇ",
+    "total_villages": 119,
+    "total_farmers": 126089,
+    "farmers_with_id_created": 71254,
+    "farmers_pending_id": -7703,
+    "completion_percentage": 57.0
+  }
+},
+{
+  "model": "dashboards.agristack",
+  "pk": 12,
+  "fields": {
+    "taluka": "αñ╣αñ╡αÑçαñ▓αÑÇ",
+    "total_villages": 160,
+    "total_farmers": 59416,
+    "farmers_with_id_created": 27109,
+    "farmers_pending_id": -2142,
+    "completion_percentage": 46.0
+  }
+},
+{
+  "model": "dashboards.agristack",
+  "pk": 13,
+  "fields": {
+    "taluka": "αñ«αÑüαñ│αÑìαñ╢αÑÇ",
+    "total_villages": 147,
+    "total_farmers": 59694,
+    "farmers_with_id_created": 22111,
+    "farmers_pending_id": 1451,
+    "completion_percentage": 37.0
+  }
+}
+]

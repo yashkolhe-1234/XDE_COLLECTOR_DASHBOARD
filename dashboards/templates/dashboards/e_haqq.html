@@ -1,0 +1,367 @@
+{% extends "dashboards/base.html" %}
+
+{% block content %}
+
+<!-- PAGE TITLE -->
+<h2 style="margin-bottom: 20px;">ई-हक्क – प्रगती डॅशबोर्ड</h2>
+
+<!-- KPI CARDS -->
+<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px;">
+
+    <div class="kpi-card">
+        <h4>एकूण अर्ज</h4>
+        <p class="kpi-value">{{ kpis.total_applications|default:"0" }}</p>
+    </div>
+
+    <div class="kpi-card">
+        <h4>स्वीकारित अर्ज</h4>
+        <p class="kpi-value">{{ kpis.approved_applications|default:"0" }}</p>
+    </div>
+
+    <div class="kpi-card">
+        <h4>अस्वीकारित अर्ज</h4>
+        <p class="kpi-value">{{ kpis.rejected_applications|default:"0" }}</p>
+    </div>
+
+    <div class="kpi-card">
+        <h4>प्रलंबित अर्ज</h4>
+        <p class="kpi-value">{{ kpis.pending_applications|default:"0" }}</p>
+    </div>
+
+</div>
+
+<!-- CHARTS SECTION -->
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 30px;">
+
+    <!-- Chart 1: Stacked Bar Chart - Taluka-wise Application Status -->
+    <div class="chart-box" style="grid-column: 1 / -1;">
+        <h4>Taluka-निहाय अर्ज स्थिती (Stacked)</h4>
+        <canvas id="chart-application-status"></canvas>
+    </div>
+
+    <!-- Chart 2: Donut Chart - Overall Application Status -->
+    <div class="chart-box">
+        <h4>एकूण अर्ज स्थिती (Executive Summary)</h4>
+        <canvas id="chart-overall-status"></canvas>
+    </div>
+
+    <!-- Chart 3: Horizontal Bar Chart - Period Work Count -->
+    <div class="chart-box">
+        <h4>कालावधीतील कामकाज - क्रमवारी</h4>
+        <canvas id="chart-period-work"></canvas>
+    </div>
+
+</div>
+
+<!-- DATA TABLE -->
+<h3 style="margin-bottom: 10px;">तालुकानिहाय तपशील</h3>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>तालुका</th>
+            <th>एकूण अर्ज</th>
+            <th>स्वीकारित</th>
+            <th>अस्वीकारित</th>
+            <th>प्रलंबित</th>
+            <th>स्वीकारित %</th>
+            <th>अस्वीकारित %</th>
+            <th>प्रलंबित %</th>
+            <th>कालावधीतील कामकाज</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if table_data %}
+            {% for row in table_data %}
+            <tr>
+                <td>{{ row.taluka }}</td>
+                <td>{{ row.total_applications }}</td>
+                <td>{{ row.approved_applications }}</td>
+                <td>{{ row.rejected_applications }}</td>
+                <td>{{ row.pending_applications }}</td>
+                <td>{{ row.approved_percentage|floatformat:1 }}%</td>
+                <td>{{ row.rejected_percentage|floatformat:1 }}%</td>
+                <td>{{ row.pending_percentage|floatformat:1 }}%</td>
+                <td>{{ row.period_work_count }}</td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="9" style="text-align:center;">डेटा नंतर जोडला जाईल</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+
+<!-- SUMMARY SECTION -->
+<div style="background: #ffffff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); margin-top: 30px;">
+    <h3 style="margin-top: 0; margin-bottom: 15px; color: #111827; font-size: 18px; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px;">
+        डॅशबोर्ड बाबत
+    </h3>
+    <p style="margin: 0; line-height: 1.8; color: #374151; font-size: 14px; text-align: justify;">
+        ई-हक्क अर्ज स्थिती – एकत्रित आढावा
+    </p>
+    <p style="margin: 15px 0 0 0; line-height: 1.8; color: #374151; font-size: 14px; text-align: justify;">
+        हा डॅशबोर्ड तालुका-निहाय ई-हक्क अर्जांच्या प्रक्रियेचा सविस्तर आढावा सादर करतो. यामध्ये प्राप्त झालेल्या एकूण अर्जांची संख्या, स्वीकारित, अस्वीकारित व प्रलंबित अर्जांची स्थिती तसेच त्यांचे टक्केवारी स्वरूपात विश्लेषण दर्शविण्यात आले आहे.
+    </p>
+    <p style="margin: 15px 0 0 0; line-height: 1.8; color: #374151; font-size: 14px; text-align: justify;">
+        स्टॅक्ड बार चार्टद्वारे प्रत्येक तालुक्यातील अर्जांची सद्यस्थिती स्पष्टपणे दिसून येते, तर डोनट चार्टमधून संपूर्ण जिल्ह्यातील अर्ज प्रक्रियेचे एकत्रित चित्र मिळते. कालावधीतील कामकाज चार्टमुळे दिलेल्या कालावधीत कोणत्या तालुक्यांमध्ये जास्त प्रमाणात अर्ज प्रक्रिया करण्यात आली आहे, याची तुलना करता येते.
+    </p>
+    <p style="margin: 15px 0 0 0; line-height: 1.8; color: #374151; font-size: 14px; text-align: justify;">
+        या डॅशबोर्डच्या माध्यमातून अर्ज प्रक्रियेतील कार्यक्षमता, प्रलंबित प्रकरणांची संख्या आणि तालुका-निहाय कामगिरी यांचे प्रभावी निरीक्षण करता येते, ज्यामुळे प्रशासकीय निर्णय अधिक सक्षमपणे घेण्यास मदत होते.
+    </p>
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<script>
+    // Chart data from Django (already JSON-encoded)
+    // These variables will be populated by the backend
+    const chartData = {
+        labels: {{ chart_data.labels|safe }},
+        approvedData: {{ chart_data.approved_data|safe }},
+        rejectedData: {{ chart_data.rejected_data|safe }},
+        pendingData: {{ chart_data.pending_data|safe }},
+        approvedPercentage: {{ chart_data.approved_percentage|safe }},
+        rejectedPercentage: {{ chart_data.rejected_percentage|safe }},
+        pendingPercentage: {{ chart_data.pending_percentage|safe }},
+        periodWorkData: {{ chart_data.period_work_data|safe }},
+        periodWorkLabels: {{ chart_data.period_work_labels|safe }}
+    };
+
+    // Chart 1: Stacked Bar Chart - Taluka-wise Application Status
+    new Chart(document.getElementById('chart-application-status'), {
+        type: 'bar',
+        data: {
+            labels: chartData.labels,
+            datasets: [
+                {
+                    label: 'स्वीकारित अर्ज',
+                    data: chartData.approvedData,
+                    backgroundColor: 'rgba(34, 197, 94, 0.8)',
+                    borderColor: 'rgba(34, 197, 94, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'अस्वीकारित अर्ज',
+                    data: chartData.rejectedData,
+                    backgroundColor: 'rgba(239, 68, 68, 0.8)',
+                    borderColor: 'rgba(239, 68, 68, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'प्रलंबित अर्ज',
+                    data: chartData.pendingData,
+                    backgroundColor: 'rgba(251, 146, 60, 0.8)',
+                    borderColor: 'rgba(251, 146, 60, 1)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 15,
+                        font: {
+                            size: 12
+                        }
+                    }
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                        footer: function(tooltipItems) {
+                            let total = 0;
+                            tooltipItems.forEach(function(tooltipItem) {
+                                total += tooltipItem.parsed.y;
+                            });
+                            return 'एकूण: ' + total;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    stacked: true,
+                    ticks: {
+                        maxRotation: 45,
+                        minRotation: 45
+                    }
+                },
+                y: {
+                    stacked: true,
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    },
+                    title: {
+                        display: true,
+                        text: 'अर्जांची संख्या'
+                    }
+                }
+            }
+        }
+    });
+
+    // Chart 2: Donut Chart - Overall Application Status (Executive Summary)
+    const totalApplications = chartData.approvedPercentage + chartData.rejectedPercentage + chartData.pendingPercentage;
+    
+    new Chart(document.getElementById('chart-overall-status'), {
+        type: 'doughnut',
+        data: {
+            labels: ['स्वीकारित', 'अस्वीकारित', 'प्रलंबित'],
+            datasets: [{
+                data: [
+                    chartData.approvedPercentage,
+                    chartData.rejectedPercentage,
+                    chartData.pendingPercentage
+                ],
+                backgroundColor: [
+                    'rgba(34, 197, 94, 0.8)',
+                    'rgba(239, 68, 68, 0.8)',
+                    'rgba(251, 146, 60, 0.8)'
+                ],
+                borderColor: '#ffffff',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'right',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 12,
+                        font: {
+                            size: 11
+                        },
+                        boxWidth: 12,
+                        generateLabels: function(chart) {
+                            const data = chart.data;
+                            if (data.labels.length && data.datasets.length) {
+                                return data.labels.map((label, i) => {
+                                    const value = data.datasets[0].data[i];
+                                    return {
+                                        text: label + ': ' + value.toFixed(1) + '%',
+                                        fillStyle: data.datasets[0].backgroundColor[i],
+                                        hidden: false,
+                                        index: i
+                                    };
+                                });
+                            }
+                            return [];
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.parsed || 0;
+                            return label + ': ' + value.toFixed(1) + '%';
+                        }
+                    }
+                }
+            },
+            cutout: '60%'
+        },
+        plugins: [{
+            id: 'centerText',
+            beforeDraw: function(chart) {
+                const ctx = chart.ctx;
+                const centerX = chart.chartArea.left + (chart.chartArea.right - chart.chartArea.left) / 2;
+                const centerY = chart.chartArea.top + (chart.chartArea.bottom - chart.chartArea.top) / 2;
+                
+                ctx.save();
+                ctx.font = 'bold 18px Arial';
+                ctx.fillStyle = '#111827';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('एकूण', centerX, centerY - 10);
+                
+                ctx.font = '14px Arial';
+                ctx.fillStyle = '#6b7280';
+                ctx.fillText('अर्ज स्थिती', centerX, centerY + 15);
+                ctx.restore();
+            }
+        }]
+    });
+
+    // Chart 3: Horizontal Bar Chart - Period Work Count (Ranked)
+    // Sort data by work count descending for ranking
+    const periodWorkData = chartData.periodWorkLabels.map((label, index) => ({
+        label: label,
+        value: chartData.periodWorkData[index]
+    })).sort((a, b) => b.value - a.value);
+
+    new Chart(document.getElementById('chart-period-work'), {
+        type: 'bar',
+        data: {
+            labels: periodWorkData.map(item => item.label),
+            datasets: [{
+                label: 'कालावधीतील कामकाज',
+                data: periodWorkData.map(item => item.value),
+                backgroundColor: function(context) {
+                    const value = context.parsed.x;
+                    const max = Math.max(...periodWorkData.map(d => d.value));
+                    // Highlight top 3 with darker color
+                    if (value >= periodWorkData.slice(0, 3).map(d => d.value).sort((a, b) => b - a)[2]) {
+                        return 'rgba(59, 130, 246, 0.9)';
+                    }
+                    return 'rgba(59, 130, 246, 0.6)';
+                },
+                borderColor: 'rgba(59, 130, 246, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            indexAxis: 'y',
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return 'कामकाज: ' + context.parsed.x;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    },
+                    title: {
+                        display: true,
+                        text: 'कामकाजाची संख्या'
+                    }
+                },
+                y: {
+                    ticks: {
+                        font: {
+                            size: 11
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}

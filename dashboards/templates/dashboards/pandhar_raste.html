@@ -1,0 +1,342 @@
+{% extends "dashboards/base.html" %}
+
+{% block content %}
+
+<!-- PAGE TITLE -->
+<h2 style="margin-bottom: 20px;">पांढर रस्ते – प्रगती डॅशबोर्ड</h2>
+
+<!-- KPI CARDS -->
+<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px;">
+
+    <div class="kpi-card">
+        <h4>Geo-tag केलेले रस्ते</h4>
+        <p class="kpi-value">{{ kpis.total_geo_tag_roads|default:"0" }}</p>
+    </div>
+
+    <div class="kpi-card">
+        <h4>अतिक्रमण काढलेले रस्ते</h4>
+        <p class="kpi-value">{{ kpis.total_cleared_roads|default:"0" }}</p>
+    </div>
+
+    <div class="kpi-card">
+        <h4>अतिक्रमण काढलेली लांबी (कि.मी.)</h4>
+        <p class="kpi-value">{{ kpis.total_cleared_length_km|default:"0.0" }}</p>
+    </div>
+
+    <div class="kpi-card">
+        <h4>लाभार्थी शेतकरी</h4>
+        <p class="kpi-value">{{ kpis.total_farmers_benefited|default:"0" }}</p>
+    </div>
+
+</div>
+
+<!-- CHARTS SECTION -->
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 30px;">
+
+    <!-- Chart 1: Grouped Bar Chart (Comparison) - Full width -->
+    <div class="chart-box" style="grid-column: 1 / -1;">
+        <h4>Taluka-निहाय Geo-tag रस्ते vs अतिक्रमण काढलेले रस्ते (तुलना)</h4>
+        <canvas id="chart-comparison"></canvas>
+    </div>
+
+    <!-- Chart 2: Horizontal Bar Chart (Ranking) -->
+    <div class="chart-box">
+        <h4>Taluka-निहाय काढलेली लांबी (कि.मी.) - क्रमवारी</h4>
+        <canvas id="chart-cleared-length"></canvas>
+    </div>
+
+    <!-- Chart 3: Donut Chart (Contribution) -->
+    <div class="chart-box">
+        <h4>लाभार्थी शेतकऱ्यांचे वितरण</h4>
+        <canvas id="chart-farmers-distribution"></canvas>
+    </div>
+
+</div>
+
+<!-- DATA TABLE -->
+<h3 style="margin-bottom: 10px;">तालुकानिहाय तपशील</h3>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>तालुका</th>
+            <th>Geo-tag रस्ते</th>
+            <th>Geo-tag लांबी (कि.मी.)</th>
+            <th>अतिक्रमण काढलेले रस्ते</th>
+            <th>काढलेली लांबी (कि.मी.)</th>
+            <th>लाभार्थी शेतकरी</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if table_data %}
+            {% for row in table_data %}
+            <tr>
+                <td>{{ row.taluka }}</td>
+                <td>{{ row.geo_tag_roads }}</td>
+                <td>{{ row.geo_tag_length_km|floatformat:2 }}</td>
+                <td>{{ row.cleared_roads }}</td>
+                <td>{{ row.cleared_length_km|floatformat:2 }}</td>
+                <td>{{ row.farmers_benefited }}</td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="6" style="text-align:center;">डेटा नंतर जोडला जाईल</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+
+<!-- SUMMARY SECTION -->
+<div style="background: #ffffff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); margin-top: 30px;">
+    <h3 style="margin-top: 0; margin-bottom: 15px; color: #111827; font-size: 18px; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px;">
+        डॅशबोर्ड बाबत
+    </h3>
+    <p style="margin: 0; line-height: 1.8; color: #374151; font-size: 14px; text-align: justify;">
+        पांढर रस्ते योजनेअंतर्गत जिल्ह्यातील विविध तालुक्यांमध्ये Geo-tag करण्यात आलेले रस्ते, अतिक्रमण काढण्यात आलेले रस्ते, अतिक्रमण काढून मोकळी करण्यात आलेली रस्त्यांची एकूण लांबी (कि.मी.) तसेच या कामातून लाभ झालेल्या शेतकऱ्यांची संख्या याबाबतचा तालुकानिहाय तपशील या डॅशबोर्डमध्ये दर्शविण्यात आला आहे. या माहितीच्या आधारे प्रत्येक तालुक्यात राबविण्यात आलेल्या अतिक्रमण निर्मूलन कार्याची प्रगती, भौतिक कामाची सद्यस्थिती व त्याचा थेट शेतकऱ्यांवर झालेला परिणाम स्पष्टपणे दिसून येतो. सदर डॅशबोर्डचा उपयोग योजनांच्या अंमलबजावणीवर देखरेख ठेवण्यासाठी, प्रगतीचा आढावा घेण्यासाठी तसेच पुढील कार्यवाहीसाठी निर्णय घेण्यासाठी होऊ शकतो.
+    </p>
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<script>
+    // Chart data from Django (already JSON-encoded)
+    const chartData = {
+        geoTagRoads: {
+            labels: {{ chart_data.geo_tag_roads.labels|safe }},
+            data: {{ chart_data.geo_tag_roads.data|safe }}
+        },
+        clearedRoads: {
+            labels: {{ chart_data.cleared_roads.labels|safe }},
+            data: {{ chart_data.cleared_roads.data|safe }}
+        },
+        clearedLength: {
+            labels: {{ chart_data.cleared_length_km.labels|safe }},
+            data: {{ chart_data.cleared_length_km.data|safe }}
+        },
+        farmersBenefited: {
+            labels: {{ chart_data.farmers_benefited.labels|safe }},
+            data: {{ chart_data.farmers_benefited.data|safe }}
+        }
+    };
+
+    // Calculate total farmers for donut chart center
+    const totalFarmers = chartData.farmersBenefited.data.reduce((sum, val) => sum + val, 0);
+
+    // Chart 1: Grouped Bar Chart - Comparison of Geo-tag Roads vs Cleared Roads
+    new Chart(document.getElementById('chart-comparison'), {
+        type: 'bar',
+        data: {
+            labels: chartData.geoTagRoads.labels,
+            datasets: [
+                {
+                    label: 'Geo-tag केलेले रस्ते',
+                    data: chartData.geoTagRoads.data,
+                    backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'अतिक्रमण काढलेले रस्ते',
+                    data: chartData.clearedRoads.data,
+                    backgroundColor: 'rgba(34, 197, 94, 0.7)',
+                    borderColor: 'rgba(34, 197, 94, 1)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 15,
+                        font: {
+                            size: 12
+                        }
+                    }
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false
+                }
+            },
+            scales: {
+                x: {
+                    stacked: false,
+                    ticks: {
+                        maxRotation: 45,
+                        minRotation: 45
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
+
+    // Chart 2: Horizontal Bar Chart - Cleared Length (Ranking)
+    // Sort data by length descending for ranking
+    const clearedLengthData = chartData.clearedLength.labels.map((label, index) => ({
+        label: label,
+        value: chartData.clearedLength.data[index]
+    })).sort((a, b) => b.value - a.value);
+
+    new Chart(document.getElementById('chart-cleared-length'), {
+        type: 'bar',
+        data: {
+            labels: clearedLengthData.map(item => item.label),
+            datasets: [{
+                label: 'काढलेली लांबी (कि.मी.)',
+                data: clearedLengthData.map(item => item.value),
+                backgroundColor: 'rgba(168, 85, 247, 0.7)',
+                borderColor: 'rgba(168, 85, 247, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            indexAxis: 'y',
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return 'लांबी: ' + context.parsed.x.toFixed(2) + ' कि.मी.';
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 1
+                    },
+                    title: {
+                        display: true,
+                        text: 'लांबी (कि.मी.)'
+                    }
+                },
+                y: {
+                    ticks: {
+                        font: {
+                            size: 11
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Chart 3: Donut Chart - Farmers Benefited Distribution
+    new Chart(document.getElementById('chart-farmers-distribution'), {
+        type: 'doughnut',
+        data: {
+            labels: chartData.farmersBenefited.labels,
+            datasets: [{
+                data: chartData.farmersBenefited.data,
+                backgroundColor: [
+                    'rgba(239, 68, 68, 0.8)',
+                    'rgba(59, 130, 246, 0.8)',
+                    'rgba(34, 197, 94, 0.8)',
+                    'rgba(168, 85, 247, 0.8)',
+                    'rgba(251, 146, 60, 0.8)',
+                    'rgba(236, 72, 153, 0.8)',
+                    'rgba(14, 165, 233, 0.8)',
+                    'rgba(20, 184, 166, 0.8)',
+                    'rgba(139, 92, 246, 0.8)',
+                    'rgba(249, 115, 22, 0.8)',
+                    'rgba(219, 39, 119, 0.8)',
+                    'rgba(37, 99, 235, 0.8)',
+                    'rgba(5, 150, 105, 0.8)',
+                    'rgba(124, 58, 237, 0.8)',
+                    'rgba(234, 88, 12, 0.8)',
+                    'rgba(190, 24, 93, 0.8)',
+                    'rgba(29, 78, 216, 0.8)',
+                    'rgba(4, 120, 87, 0.8)'
+                ],
+                borderColor: '#ffffff',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'right',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 10,
+                        font: {
+                            size: 10
+                        },
+                        boxWidth: 12
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.parsed || 0;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return label + ': ' + value + ' (' + percentage + '%)';
+                        }
+                    }
+                },
+                // Custom plugin to show total in center
+                title: {
+                    display: true,
+                    text: 'एकूण: ' + totalFarmers.toLocaleString(),
+                    position: 'bottom',
+                    font: {
+                        size: 14,
+                        weight: 'bold'
+                    },
+                    padding: {
+                        top: 20
+                    }
+                }
+            },
+            // Center text plugin (using Chart.js built-in)
+            cutout: '60%'
+        },
+        plugins: [{
+            id: 'centerText',
+            beforeDraw: function(chart) {
+                const ctx = chart.ctx;
+                const centerX = chart.chartArea.left + (chart.chartArea.right - chart.chartArea.left) / 2;
+                const centerY = chart.chartArea.top + (chart.chartArea.bottom - chart.chartArea.top) / 2;
+                
+                ctx.save();
+                ctx.font = 'bold 20px Arial';
+                ctx.fillStyle = '#111827';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(totalFarmers.toLocaleString(), centerX, centerY - 10);
+                
+                ctx.font = '14px Arial';
+                ctx.fillStyle = '#6b7280';
+                ctx.fillText('एकूण शेतकरी', centerX, centerY + 15);
+                ctx.restore();
+            }
+        }]
+    });
+</script>
+
+{% endblock %}
