@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     path('', views.dashboard_home, name='dashboard_home'),
     path('pandhar-raste/', views.pandhar_raste_dashboard, name='pandhar_raste'),
+    path('pandhar-raste/<str:taluka>/', views.pandhar_raste_detail, name='pandhar_raste_detail'),
     path('e-haqq/', views.e_haqq_dashboard, name='e_haqq'),
     path('e-ferfar/', views.e_ferfar_dashboard, name='e_ferfar'),
     path('e-ferfar-2/', views.e_ferfar_2_dashboard, name='e_ferfar_2'),

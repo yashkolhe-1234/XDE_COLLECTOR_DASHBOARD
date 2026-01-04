@@ -71,7 +71,11 @@
         {% if table_data %}
             {% for row in table_data %}
             <tr>
-                <td>{{ row.taluka }}</td>
+                <td>
+                    <a href="{% url 'pandhar_raste_detail' taluka=row.taluka %}" style="color: #3b82f6; text-decoration: none; font-weight: 600;">
+                        {{ row.taluka }}
+                    </a>
+                </td>
                 <td>{{ row.geo_tag_roads }}</td>
                 <td>{{ row.geo_tag_length_km|floatformat:2 }}</td>
                 <td>{{ row.cleared_roads }}</td>

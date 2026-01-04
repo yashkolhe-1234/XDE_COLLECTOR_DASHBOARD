@@ -175,3 +175,35 @@ def agristack_dashboard(request):
         "chart_data": chart_data_json,
         "table_data": talukas,
     })
+
+
+def pandhar_raste_detail(request, taluka):
+    """
+    Detail view for a specific taluka showing road-level data.
+    """
+    from django.shortcuts import get_object_or_404
+    from .models import PandharRaste
+    from .services.pandhar_raste_detail_service import (
+        generate_road_level_data,
+        calculate_insights
+    )
+    
+    # Fetch taluka summary (case-insensitive)
+    taluka_summary = get_object_or_404(
+        PandharRaste,
+        taluka__iexact=taluka
+    )
+    
+    # Generate road-level dummy data
+    roads = generate_road_level_data(taluka_summary)
+    
+    # Calculate insights
+    insights = calculate_insights(taluka_summary, roads)
+    
+    return render(request, "dashboards/pandhar_raste_detail.html", {
+        "sidebar_items": SIDEBAR_ITEMS,
+        "page_title": f"पांढर रस्ते - {taluka_summary.taluka}",
+        "taluka_summary": taluka_summary,
+        "roads": roads,
+        "insights": insights,
+    })
