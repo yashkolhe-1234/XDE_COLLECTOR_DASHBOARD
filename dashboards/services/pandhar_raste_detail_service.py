@@ -142,3 +142,164 @@ def calculate_insights(taluka_summary, roads):
         'cleared_length_percentage': round(cleared_length_percentage, 2),
     }
 
+
+def generate_officer_pool(taluka, num_roads):
+    """
+    Generate a fixed pool of fake officers for a taluka.
+    
+    Args:
+        taluka: Taluka name
+        num_roads: Number of roads (to determine pool size)
+        
+    Returns:
+        list: List of officer dictionaries with name, designation, department, contact, assigned_since
+    """
+    # Determine pool size (8-15 officers based on road count)
+    if num_roads <= 10:
+        pool_size = 8
+    elif num_roads <= 20:
+        pool_size = 10
+    elif num_roads <= 30:
+        pool_size = 12
+    else:
+        pool_size = 15
+    
+    # Indian names pool (deterministic based on taluka)
+    first_names = [
+        "Rajesh", "Suresh", "Mahesh", "Vikram", "Amit", "Ramesh", "Naresh", "Prakash",
+        "Sunil", "Anil", "Dilip", "Vijay", "Ajay", "Sanjay", "Pradeep"
+    ]
+    last_names = [
+        "Patil", "Deshmukh", "Jadhav", "Kadam", "Shinde", "Pawar", "More", "Gaikwad",
+        "Kulkarni", "Joshi", "Sharma", "Kumar", "Singh", "Yadav", "Khan"
+    ]
+    designations = [
+        "Junior Engineer", "Section Engineer", "Assistant Engineer", 
+        "Executive Engineer", "Deputy Engineer"
+    ]
+    departments = [
+        "Rural Roads Department", "Zilla Parishad", "Public Works Department",
+        "Rural Development Department"
+    ]
+    
+    # Use taluka as seed for deterministic generation
+    seed = hashlib.md5(taluka.encode('utf-8')).hexdigest()
+    seed_int = int(seed[:8], 16)
+    
+    officers = []
+    for i in range(pool_size):
+        # Deterministic selection based on seed
+        first_idx = (seed_int + i * 3) % len(first_names)
+        last_idx = (seed_int + i * 5) % len(last_names)
+        designation_idx = (seed_int + i * 7) % len(designations)
+        dept_idx = (seed_int + i * 11) % len(departments)
+        
+        name = f"{first_names[first_idx]} {last_names[last_idx]}"
+        designation = designations[designation_idx]
+        department = departments[dept_idx]
+        
+        # Generate fake contact (masked)
+        contact_seed = (seed_int + i * 13) % 10000
+        contact = f"+91 9XXX {contact_seed:04d}"
+        
+        # Assigned since (2018-2023)
+        assigned_year = 2018 + ((seed_int + i * 17) % 6)
+        
+        officers.append({
+            'name': name,
+            'designation': designation,
+            'department': department,
+            'contact': contact,
+            'assigned_since': assigned_year,
+        })
+    
+    return officers
+
+
+def assign_roads_to_officers(roads, officers):
+    """
+    Assign each road to an officer deterministically.
+    
+    Args:
+        roads: List of road dictionaries
+        officers: List of officer dictionaries
+        
+    Returns:
+        dict: Mapping of road_id to officer data
+    """
+    if not roads or not officers:
+        return {}
+    
+    assignments = {}
+    for road in roads:
+        road_id = road['road_id']
+        # Use road_id as seed for deterministic assignment
+        road_seed = hashlib.md5(road_id.encode('utf-8')).hexdigest()
+        road_seed_int = int(road_seed[:8], 16)
+        
+        # Assign to officer from pool
+        officer_idx = road_seed_int % len(officers)
+        assignments[road_id] = officers[officer_idx].copy()
+    
+    return assignments
+
+
+def get_road_incharge_data(taluka_summary, roads):
+    """
+    Generate officer pool and assign roads to officers.
+    
+    Args:
+        taluka_summary: PandharRaste model instance
+        roads: List of road dictionaries
+        
+    Returns:
+        dict: {
+            'officers': list of officers,
+            'assignments': dict mapping road_id to officer
+        }
+    """
+    taluka = taluka_summary.taluka
+    num_roads = len(roads)
+    
+    # Generate officer pool
+    officers = generate_officer_pool(taluka, num_roads)
+    
+    # Assign roads to officers
+    assignments = assign_roads_to_officers(roads, officers)
+    
+    return {
+        'officers': officers,
+        'assignments': assignments,
+    }
+
+
+def calculate_road_insights(road, all_roads, taluka_summary):
+    """
+    Calculate micro-insights for a specific road.
+    
+    Args:
+        road: Road dictionary
+        all_roads: List of all road dictionaries
+        taluka_summary: PandharRaste model instance
+        
+    Returns:
+        dict: Road-specific insights
+    """
+    # Rank by farmers benefited
+    sorted_by_farmers = sorted(all_roads, key=lambda x: x['farmers_benefited'], reverse=True)
+    rank_by_farmers = next((i + 1 for i, r in enumerate(sorted_by_farmers) if r['road_id'] == road['road_id']), len(all_roads))
+    
+    # Rank by length
+    sorted_by_length = sorted(all_roads, key=lambda x: x['length_km'], reverse=True)
+    rank_by_length = next((i + 1 for i, r in enumerate(sorted_by_length) if r['road_id'] == road['road_id']), len(all_roads))
+    
+    # Contribution to taluka farmers
+    total_farmers = taluka_summary.farmers_benefited
+    contribution_percentage = (road['farmers_benefited'] / total_farmers * 100) if total_farmers > 0 else 0.0
+    
+    return {
+        'rank_by_farmers': rank_by_farmers,
+        'rank_by_length': rank_by_length,
+        'contribution_percentage': round(contribution_percentage, 2),
+    }
+

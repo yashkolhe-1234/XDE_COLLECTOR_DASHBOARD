@@ -1,0 +1,109 @@
+{% extends "dashboards/base.html" %}
+
+{% block content %}
+
+<!-- HEADER -->
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h2 style="margin: 0;">पांढर रस्ते - डेटा व्यवस्थापन</h2>
+    <a href="{% url 'pandhar_raste' %}" style="color: #3b82f6; text-decoration: none;">← Dashboard वर परत</a>
+</div>
+
+<!-- MESSAGES -->
+{% if messages %}
+    <div style="margin-bottom: 20px;">
+        {% for message in messages %}
+            <div style="padding: 12px 16px; margin-bottom: 10px; border-radius: 6px; 
+                {% if message.tags == 'error' %}background-color: #fee2e2; color: #991b1b; border: 1px solid #fecaca;
+                {% elif message.tags == 'warning' %}background-color: #fef3c7; color: #92400e; border: 1px solid #fde68a;
+                {% else %}background-color: #d1fae5; color: #065f46; border: 1px solid #a7f3d0;{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<!-- ACTION BUTTONS -->
+<div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+    <a href="{% url 'pandhar_raste_add' %}" style="display: inline-block; padding: 10px 20px; background-color: #10b981; color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: 600;">
+        + नवीन तालुका जोडा
+    </a>
+    <button onclick="document.getElementById('importForm').style.display = document.getElementById('importForm').style.display === 'none' ? 'block' : 'none';" 
+            style="padding: 10px 20px; background-color: #3b82f6; color: #ffffff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+        📥 Excel आयात करा
+    </button>
+</div>
+
+<!-- EXCEL IMPORT FORM -->
+<div id="importForm" style="display: none; background: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); margin-bottom: 20px;">
+    <h3 style="margin-top: 0; margin-bottom: 15px;">Excel फाइल आयात करा</h3>
+    <form method="post" action="{% url 'pandhar_raste_import' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #374151;">Excel फाइल (.xlsx)</label>
+            <input type="file" name="excel_file" accept=".xlsx,.xlsm" required 
+                   style="padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; width: 100%; max-width: 400px;">
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #374151;">Sheet नाव (ऐच्छिक)</label>
+            <input type="text" name="sheet_name" 
+                   style="padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; width: 100%; max-width: 400px;">
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #374151;">Header Row (पहिली पंक्ती)</label>
+            <input type="number" name="header_row" value="1" min="1" 
+                   style="padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; width: 100%; max-width: 200px;">
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <button type="submit" style="padding: 10px 20px; background-color: #3b82f6; color: #ffffff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                आयात करा
+            </button>
+            <button type="button" onclick="document.getElementById('importForm').style.display = 'none';" 
+                    style="padding: 10px 20px; background-color: #6b7280; color: #ffffff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                रद्द करा
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- DATA TABLE -->
+<h3 style="margin-bottom: 10px;">तालुकानिहाय डेटा</h3>
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>तालुका</th>
+            <th>Geo-tag रस्ते</th>
+            <th>Geo-tag लांबी (कि.मी.)</th>
+            <th>काढलेले रस्ते</th>
+            <th>काढलेली लांबी (कि.मी.)</th>
+            <th>लाभार्थी शेतकरी</th>
+            <th>क्रिया</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if talukas %}
+            {% for taluka in talukas %}
+            <tr>
+                <td>{{ taluka.taluka }}</td>
+                <td>{{ taluka.geo_tag_roads }}</td>
+                <td>{{ taluka.geo_tag_length_km|floatformat:2 }}</td>
+                <td>{{ taluka.cleared_roads }}</td>
+                <td>{{ taluka.cleared_length_km|floatformat:2 }}</td>
+                <td>{{ taluka.farmers_benefited }}</td>
+                <td>
+                    <a href="{% url 'pandhar_raste_edit' taluka.pk %}" style="color: #3b82f6; text-decoration: none; margin-right: 10px;">संपादन</a>
+                    <a href="{% url 'pandhar_raste_delete' taluka.pk %}" style="color: #ef4444; text-decoration: none;" onclick="return confirm('तुम्हाला खात्री आहे की तुम्ही हा डेटा हटवू इच्छिता?');">हटवा</a>
+                </td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="7" style="text-align:center; padding: 30px; color: #6b7280;">
+                    अजून कोणताही डेटा नाही. कृपया नवीन तालुका जोडा.
+                </td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+
+{% endblock %}
+

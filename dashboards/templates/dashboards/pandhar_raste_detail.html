@@ -2,6 +2,15 @@
 
 {% block content %}
 
+<style>
+    .road-row:hover {
+        background-color: #f3f4f6 !important;
+    }
+    .road-row:active {
+        background-color: #e5e7eb !important;
+    }
+</style>
+
 <!-- HEADER -->
 <div style="margin-bottom: 20px;">
     <h2 style="margin-bottom: 5px;">पांढर रस्ते – {{ taluka_summary.taluka }} तालुका</h2>
@@ -72,7 +81,7 @@
     <tbody>
         {% if roads %}
             {% for road in roads %}
-            <tr>
+            <tr class="road-row" data-road-id="{{ road.road_id }}" style="cursor: pointer;">
                 <td>{{ road.road_id }}</td>
                 <td>{{ road.road_name }}</td>
                 <td>{{ road.length_km|floatformat:2 }}</td>
@@ -107,6 +116,161 @@
         Dashboard वर परत
     </a>
 </div>
+
+<!-- MODAL FOR ROAD INCHARGE -->
+<div id="roadModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+    <div style="background: #ffffff; border-radius: 8px; padding: 30px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.15); position: relative;">
+        <button id="closeModal" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; color: #6b7280; padding: 0; width: 30px; height: 30px; line-height: 30px;">&times;</button>
+        
+        <h3 style="margin-top: 0; margin-bottom: 20px; color: #111827; font-size: 20px; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px;" id="modalRoadTitle">रस्ता तपशील</h3>
+        
+        <!-- Road Information -->
+        <div style="margin-bottom: 25px;">
+            <h4 style="color: #374151; font-size: 16px; margin-bottom: 15px;">रस्ता माहिती</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div>
+                    <p style="margin: 0; color: #6b7280; font-size: 13px;">रस्ता ID</p>
+                    <p style="margin: 5px 0 0 0; color: #111827; font-weight: 600; font-size: 14px;" id="modalRoadId">-</p>
+                </div>
+                <div>
+                    <p style="margin: 0; color: #6b7280; font-size: 13px;">लांबी (कि.मी.)</p>
+                    <p style="margin: 5px 0 0 0; color: #111827; font-weight: 600; font-size: 14px;" id="modalRoadLength">-</p>
+                </div>
+                <div>
+                    <p style="margin: 0; color: #6b7280; font-size: 13px;">स्थिती</p>
+                    <p style="margin: 5px 0 0 0; color: #111827; font-weight: 600; font-size: 14px;" id="modalRoadStatus">-</p>
+                </div>
+                <div>
+                    <p style="margin: 0; color: #6b7280; font-size: 13px;">लाभार्थी शेतकरी</p>
+                    <p style="margin: 5px 0 0 0; color: #111827; font-weight: 600; font-size: 14px;" id="modalRoadFarmers">-</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Incharge Information -->
+        <div style="margin-bottom: 25px; padding: 20px; background: #f9fafb; border-radius: 6px;">
+            <h4 style="color: #374151; font-size: 16px; margin-bottom: 15px;">रस्ता प्रभारी माहिती</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div>
+                    <p style="margin: 0; color: #6b7280; font-size: 13px;">नाव</p>
+                    <p style="margin: 5px 0 0 0; color: #111827; font-weight: 600; font-size: 14px;" id="modalInchargeName">-</p>
+                </div>
+                <div>
+                    <p style="margin: 0; color: #6b7280; font-size: 13px;">पदनाम</p>
+                    <p style="margin: 5px 0 0 0; color: #111827; font-weight: 600; font-size: 14px;" id="modalInchargeDesignation">-</p>
+                </div>
+                <div>
+                    <p style="margin: 0; color: #6b7280; font-size: 13px;">विभाग</p>
+                    <p style="margin: 5px 0 0 0; color: #111827; font-weight: 600; font-size: 14px;" id="modalInchargeDepartment">-</p>
+                </div>
+                <div>
+                    <p style="margin: 0; color: #6b7280; font-size: 13px;">संपर्क</p>
+                    <p style="margin: 5px 0 0 0; color: #111827; font-weight: 600; font-size: 14px;" id="modalInchargeContact">-</p>
+                </div>
+                <div>
+                    <p style="margin: 0; color: #6b7280; font-size: 13px;">प्रभारी पासून</p>
+                    <p style="margin: 5px 0 0 0; color: #111827; font-weight: 600; font-size: 14px;" id="modalInchargeSince">-</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Micro Insights -->
+        <div>
+            <h4 style="color: #374151; font-size: 16px; margin-bottom: 15px;">विश्लेषण</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div>
+                    <p style="margin: 0; color: #6b7280; font-size: 13px;">शेतकऱ्यांनुसार क्रम</p>
+                    <p style="margin: 5px 0 0 0; color: #111827; font-weight: 600; font-size: 14px;" id="modalRankFarmers">-</p>
+                </div>
+                <div>
+                    <p style="margin: 0; color: #6b7280; font-size: 13px;">लांबीनुसार क्रम</p>
+                    <p style="margin: 5px 0 0 0; color: #111827; font-weight: 600; font-size: 14px;" id="modalRankLength">-</p>
+                </div>
+                <div style="grid-column: 1 / -1;">
+                    <p style="margin: 0; color: #6b7280; font-size: 13px;">तालुक्यातील शेतकऱ्यांमध्ये योगदान</p>
+                    <p style="margin: 5px 0 0 0; color: #111827; font-weight: 600; font-size: 14px;" id="modalContribution">-</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Road data from backend
+    const roadsData = {{ roads_json|safe }};
+    
+    // Modal elements
+    const modal = document.getElementById('roadModal');
+    const closeModalBtn = document.getElementById('closeModal');
+    const roadRows = document.querySelectorAll('.road-row');
+    
+    // Open modal when road row is clicked
+    roadRows.forEach(row => {
+        row.addEventListener('click', function() {
+            const roadId = this.getAttribute('data-road-id');
+            const road = roadsData.find(r => r.road_id === roadId);
+            
+            if (road) {
+                // Set road information
+                document.getElementById('modalRoadTitle').textContent = road.road_name;
+                document.getElementById('modalRoadId').textContent = road.road_id;
+                document.getElementById('modalRoadLength').textContent = road.length_km.toFixed(2) + ' कि.मी.';
+                document.getElementById('modalRoadStatus').innerHTML = road.status === 'Cleared' 
+                    ? '<span style="color: #10b981; font-weight: 600;">' + road.status + '</span>'
+                    : '<span style="color: #f59e0b; font-weight: 600;">' + road.status + '</span>';
+                document.getElementById('modalRoadFarmers').textContent = road.farmers_benefited;
+                
+                // Set incharge information
+                if (road.incharge) {
+                    document.getElementById('modalInchargeName').textContent = road.incharge.name || '-';
+                    document.getElementById('modalInchargeDesignation').textContent = road.incharge.designation || '-';
+                    document.getElementById('modalInchargeDepartment').textContent = road.incharge.department || '-';
+                    document.getElementById('modalInchargeContact').textContent = road.incharge.contact || '-';
+                    document.getElementById('modalInchargeSince').textContent = road.incharge.assigned_since ? road.incharge.assigned_since + ' पासून' : '-';
+                } else {
+                    document.getElementById('modalInchargeName').textContent = '-';
+                    document.getElementById('modalInchargeDesignation').textContent = '-';
+                    document.getElementById('modalInchargeDepartment').textContent = '-';
+                    document.getElementById('modalInchargeContact').textContent = '-';
+                    document.getElementById('modalInchargeSince').textContent = '-';
+                }
+                
+                // Set insights
+                if (road.road_insights) {
+                    document.getElementById('modalRankFarmers').textContent = '#' + road.road_insights.rank_by_farmers;
+                    document.getElementById('modalRankLength').textContent = '#' + road.road_insights.rank_by_length;
+                    document.getElementById('modalContribution').textContent = road.road_insights.contribution_percentage + '%';
+                } else {
+                    document.getElementById('modalRankFarmers').textContent = '-';
+                    document.getElementById('modalRankLength').textContent = '-';
+                    document.getElementById('modalContribution').textContent = '-';
+                }
+                
+                // Show modal
+                modal.style.display = 'flex';
+            }
+        });
+    });
+    
+    // Close modal
+    closeModalBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+    });
+    
+    // Close modal when clicking outside
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.style.display === 'flex') {
+            modal.style.display = 'none';
+        }
+    });
+</script>
 
 {% endblock %}
 

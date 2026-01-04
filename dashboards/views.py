@@ -177,6 +177,188 @@ def agristack_dashboard(request):
     })
 
 
+def pandhar_raste_manage(request):
+    """
+    Manage page for PandharRaste data (view, add, edit, delete, import).
+    Requires authentication.
+    """
+    from django.shortcuts import redirect
+    from .models import PandharRaste
+    
+    # Check authentication
+    if not request.user.is_authenticated:
+        return redirect('admin:login')
+    
+    # Get all taluka data
+    talukas = PandharRaste.objects.all().order_by('taluka')
+    
+    return render(request, "dashboards/pandhar_raste_manage.html", {
+        "sidebar_items": SIDEBAR_ITEMS,
+        "page_title": "पांढर रस्ते - डेटा व्यवस्थापन",
+        "talukas": talukas,
+    })
+
+
+def pandhar_raste_add(request):
+    """
+    Add new taluka data.
+    """
+    from django.shortcuts import redirect
+    from django.contrib import messages
+    from .forms import PandharRasteForm
+    
+    # Check authentication
+    if not request.user.is_authenticated:
+        return redirect('admin:login')
+    
+    if request.method == 'POST':
+        form = PandharRasteForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'तालुका "{form.cleaned_data["taluka"]}" चा डेटा यशस्वीरित्या जोडला गेला.')
+            return redirect('pandhar_raste_manage')
+        else:
+            messages.error(request, 'कृपया त्रुटी दुरुस्त करा.')
+    else:
+        form = PandharRasteForm()
+    
+    return render(request, "dashboards/pandhar_raste_form.html", {
+        "sidebar_items": SIDEBAR_ITEMS,
+        "page_title": "नवीन तालुका जोडा",
+        "form": form,
+        "form_title": "नवीन तालुका डेटा जोडा",
+    })
+
+
+def pandhar_raste_edit(request, pk):
+    """
+    Edit existing taluka data.
+    """
+    from django.shortcuts import redirect, get_object_or_404
+    from django.contrib import messages
+    from .forms import PandharRasteForm
+    from .models import PandharRaste
+    
+    # Check authentication
+    if not request.user.is_authenticated:
+        return redirect('admin:login')
+    
+    taluka = get_object_or_404(PandharRaste, pk=pk)
+    
+    if request.method == 'POST':
+        form = PandharRasteForm(request.POST, instance=taluka)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'तालुका "{form.cleaned_data["taluka"]}" चा डेटा यशस्वीरित्या अपडेट केला गेला.')
+            return redirect('pandhar_raste_manage')
+        else:
+            messages.error(request, 'कृपया त्रुटी दुरुस्त करा.')
+    else:
+        form = PandharRasteForm(instance=taluka)
+    
+    return render(request, "dashboards/pandhar_raste_form.html", {
+        "sidebar_items": SIDEBAR_ITEMS,
+        "page_title": f"तालुका संपादन - {taluka.taluka}",
+        "form": form,
+        "form_title": f"तालुका संपादन: {taluka.taluka}",
+    })
+
+
+def pandhar_raste_delete(request, pk):
+    """
+    Delete taluka data with confirmation.
+    """
+    from django.shortcuts import redirect, get_object_or_404
+    from django.contrib import messages
+    from .models import PandharRaste
+    
+    # Check authentication
+    if not request.user.is_authenticated:
+        return redirect('admin:login')
+    
+    taluka = get_object_or_404(PandharRaste, pk=pk)
+    taluka_name = taluka.taluka
+    
+    if request.method == 'POST':
+        taluka.delete()
+        messages.success(request, f'तालुका "{taluka_name}" चा डेटा यशस्वीरित्या हटवला गेला.')
+        return redirect('pandhar_raste_manage')
+    
+    return render(request, "dashboards/pandhar_raste_delete.html", {
+        "sidebar_items": SIDEBAR_ITEMS,
+        "page_title": "तालुका डेटा हटवा",
+        "taluka": taluka,
+    })
+
+
+def pandhar_raste_import(request):
+    """
+    Import data from Excel file.
+    """
+    from django.shortcuts import redirect
+    from django.contrib import messages
+    from data_ingestion.services.excel_importer import import_pandhar_raste_excel, ExcelImportError
+    import tempfile
+    import os
+    
+    # Check authentication
+    if not request.user.is_authenticated:
+        return redirect('admin:login')
+    
+    if request.method == 'POST':
+        if 'excel_file' not in request.FILES:
+            messages.error(request, 'कृपया Excel फाइल निवडा.')
+            return redirect('pandhar_raste_manage')
+        
+        excel_file = request.FILES['excel_file']
+        
+        # Validate file extension
+        if not excel_file.name.endswith(('.xlsx', '.xlsm')):
+            messages.error(request, 'फाइल .xlsx किंवा .xlsm स्वरूपात असावी.')
+            return redirect('pandhar_raste_manage')
+        
+        # Save uploaded file temporarily
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.xlsx') as tmp_file:
+            for chunk in excel_file.chunks():
+                tmp_file.write(chunk)
+            tmp_file_path = tmp_file.name
+        
+        try:
+            # Import data
+            result = import_pandhar_raste_excel(
+                file_path=tmp_file_path,
+                sheet_name=request.POST.get('sheet_name') or None,
+                header_row=int(request.POST.get('header_row', 1)),
+                update_existing=True
+            )
+            
+            # Clean up temp file
+            os.unlink(tmp_file_path)
+            
+            # Show success message
+            if result['success'] > 0:
+                messages.success(request, f'{result["success"]} रेकॉर्ड यशस्वीरित्या आयात केले.')
+            
+            if result['skipped'] > 0:
+                messages.warning(request, f'{result["skipped"]} रेकॉर्ड वगळले गेले.')
+            
+            if result['errors']:
+                error_count = len(result['errors'])
+                error_preview = '\n'.join(result['errors'][:5])
+                if error_count > 5:
+                    error_preview += f'\n... आणि {error_count - 5} अधिक त्रुटी'
+                messages.error(request, f'{error_count} त्रुटी आढळल्या:\n{error_preview}')
+            
+        except ExcelImportError as e:
+            os.unlink(tmp_file_path)
+            messages.error(request, f'आयात अयशस्वी: {str(e)}')
+        except Exception as e:
+            os.unlink(tmp_file_path)
+            messages.error(request, f'अनपेक्षित त्रुटी: {str(e)}')
+    
+    return redirect('pandhar_raste_manage')
+
+
 def pandhar_raste_detail(request, taluka):
     """
     Detail view for a specific taluka showing road-level data.
@@ -185,8 +367,11 @@ def pandhar_raste_detail(request, taluka):
     from .models import PandharRaste
     from .services.pandhar_raste_detail_service import (
         generate_road_level_data,
-        calculate_insights
+        calculate_insights,
+        get_road_incharge_data,
+        calculate_road_insights
     )
+    import json
     
     # Fetch taluka summary (case-insensitive)
     taluka_summary = get_object_or_404(
@@ -200,10 +385,30 @@ def pandhar_raste_detail(request, taluka):
     # Calculate insights
     insights = calculate_insights(taluka_summary, roads)
     
+    # Generate incharge data
+    incharge_data = get_road_incharge_data(taluka_summary, roads)
+    
+    # Prepare road data with incharge assignments and insights
+    roads_with_details = []
+    for road in roads:
+        road_id = road['road_id']
+        incharge = incharge_data['assignments'].get(road_id, {})
+        road_insights = calculate_road_insights(road, roads, taluka_summary)
+        
+        roads_with_details.append({
+            **road,
+            'incharge': incharge,
+            'road_insights': road_insights,
+        })
+    
+    # Serialize for JavaScript (for modal)
+    roads_json = json.dumps(roads_with_details)
+    
     return render(request, "dashboards/pandhar_raste_detail.html", {
         "sidebar_items": SIDEBAR_ITEMS,
         "page_title": f"पांढर रस्ते - {taluka_summary.taluka}",
         "taluka_summary": taluka_summary,
-        "roads": roads,
+        "roads": roads_with_details,
+        "roads_json": roads_json,
         "insights": insights,
     })
